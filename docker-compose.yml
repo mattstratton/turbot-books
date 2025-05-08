@@ -1,0 +1,28 @@
+name: turbot-books
+services:
+  envoy:
+    build: ./envoy
+    ports:
+      - "8080:80"
+      - "8001:8001"
+    volumes:
+      - ./envoy/config/envoy.yml:/etc/envoy/envoy.yaml
+    environment:
+      - DEBUG_LEVEL=debug
+      - SERVICE_NAME=app
+      - SERVICE_PORT=4400
+
+  app:
+    build: ./writebook
+    # ports:
+    #   - "4400:80"
+    environment:
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - DISABLE_SSL=true
+      - REPLICA_URL=${REPLICA_URL}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+    volumes:
+      - ./writebook/storage:/rails/storage 
+      - ./writebook/tmp:/rails/tmp 

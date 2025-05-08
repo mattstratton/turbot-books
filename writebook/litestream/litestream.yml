@@ -1,0 +1,4 @@
+dbs:
+  - path: /rails/storage/db/production.sqlite3
+    replicas:
+      - url: ${REPLICA_URL}
